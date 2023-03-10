@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/NYCSchoolListFragment">
+    <fragment
+        android:id="@+id/NYCSchoolListFragment"
+        android:name="com.example.a20230307_mfa_nycschools.view.NYCSchoolListFragment"
+        android:label="fragment_n_y_c_school_list"
+        tools:layout="@layout/fragment_n_y_c_school_list" >
+        <action
+            android:id="@+id/action_NYCSchoolListFragment_to_NYCSATFragment"
+            app:destination="@id/NYCSATFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/NYCSATFragment"
+        android:name="com.example.a20230307_mfa_nycschools.view.NYCSATFragment"
+        android:label="fragment_nyc_sat"
+        tools:layout="@layout/fragment_nyc_sat" />
+</navigation>

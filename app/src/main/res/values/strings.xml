@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">20230307-MFA-NYCSchools</string>
+    <string name="school_list_error">No Schools Found</string>
+    <string name="num_test_takers_title">Number of Applicants:</string>
+    <string name="sat_reading_score">Average Critical Reading Score:</string>
+    <string name="sat_math_score">Average Math Score:</string>
+    <string name="sat_writing_score">Average Writing Score:</string>
+</resources>
