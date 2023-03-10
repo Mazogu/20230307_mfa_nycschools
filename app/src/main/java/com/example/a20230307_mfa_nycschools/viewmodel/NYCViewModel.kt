@@ -11,7 +11,11 @@ import timber.log.Timber
 /**
  * View model for handling NYC school requests.
  * Written in Kotlin because I like coroutines and suspended functions.
- * @param repo [NYCSchoolRepo] Repository for necessary network calls.
+ * @property repo [NYCSchoolRepo] Repository for necessary network calls.
+ * @property _schoolList [MutableLiveData] For responding to the list of schools in our coroutine.
+ * @property schoolList [LiveData] representation for [_schoolList].
+ * @property _currentSchool [MutableLiveData] Representing the selected school from the list.
+ * @property currentSchool [LiveData] representation for [_currentSchool].
  */
 @Suppress("UNCHECKED_CAST")
 class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
@@ -25,7 +29,8 @@ class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
      * Coroutine call for getting NYC school list
      */
     fun getNYCSchools(){
-        viewModelScope.launch(Dispatchers.IO) {
+        IdleResource.getResourceInstance().increment()
+        val job = viewModelScope.launch(Dispatchers.IO) {
             try{
                 Timber.d("Coroutine Launched")
                 val response = repo.getNYCSchools()
@@ -42,6 +47,9 @@ class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
                 Timber.e(e)
             }
         }
+        job.invokeOnCompletion {
+            IdleResource.getResourceInstance().decrement()
+        }
     }
 
     /**
@@ -49,7 +57,8 @@ class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
      * @param id The [String] dbn of the school.
      */
     fun getSATScores(id:String){
-        viewModelScope.launch(Dispatchers.IO) {
+        IdleResource.getResourceInstance().increment()
+        val job = viewModelScope.launch(Dispatchers.IO) {
             try{
                 val response = repo.getSATScores(id)
                 if (response.isSuccessful && response.body()?.isNotEmpty() == true) {
@@ -68,6 +77,9 @@ class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
                 _currentSchool.postValue(fakeStudent)
                 Timber.e(e)
             }
+        }
+        job.invokeOnCompletion {
+            IdleResource.getResourceInstance().decrement()
         }
     }
 
