@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a20230307_mfa_nycschools.R;
+import com.example.a20230307_mfa_nycschools.databinding.NycSchoolLayoutBinding;
 import com.example.a20230307_mfa_nycschools.model.NYCSchool;
 
 import java.util.List;
@@ -27,15 +29,15 @@ public class NYCSchoolAdapter extends RecyclerView.Adapter<NYCSchoolAdapter.NYCS
     @NonNull
     @Override
     public NYCSchoolHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.nyc_school_layout, parent, false);
-        return new NYCSchoolHolder(view);
+        NycSchoolLayoutBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.nyc_school_layout, parent, false);
+        return new NYCSchoolHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NYCSchoolHolder holder, int position) {
         NYCSchool school = schoolList.get(position);
-        holder.getSchoolName().setText(school.getName());
-        holder.getSchoolName().setOnClickListener(view -> {
+        holder.bind(school);
+        holder.itemView.setOnClickListener(view -> {
             NavController controller = Navigation.findNavController(holder.itemView);
             Bundle bundle = new Bundle();
             bundle.putString("schoolId", school.getId());
@@ -49,14 +51,16 @@ public class NYCSchoolAdapter extends RecyclerView.Adapter<NYCSchoolAdapter.NYCS
     }
 
     protected static class NYCSchoolHolder extends RecyclerView.ViewHolder {
-        private final TextView schoolName;
-        public NYCSchoolHolder(@NonNull View itemView) {
-            super(itemView);
-            schoolName = itemView.findViewById(R.id.schoolName);
+        private final NycSchoolLayoutBinding binding;
+
+        public NYCSchoolHolder(@NonNull NycSchoolLayoutBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        public TextView getSchoolName(){
-            return schoolName;
+        public void bind(NYCSchool school){
+            binding.setListedSchool(school);
+            binding.executePendingBindings();
         }
     }
 }

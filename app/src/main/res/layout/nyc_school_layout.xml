@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/card_margin_bottom"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
+    <data>
+        <variable
+            name="listedSchool"
+            type="com.example.a20230307_mfa_nycschools.model.NYCSchool" />
+    </data>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:gravity="start|center_vertical"
-        android:paddingTop="@dimen/card_padding"
-        android:paddingBottom="@dimen/card_padding"
-        android:layout_marginStart="@dimen/side_margin"
-        android:layout_marginEnd="@dimen/side_margin"
-        android:id="@+id/schoolName"/>
-</androidx.cardview.widget.CardView>
+        android:layout_marginBottom="@dimen/card_margin_bottom">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@{listedSchool.name}"
+            android:gravity="start|center_vertical"
+            android:paddingTop="@dimen/card_padding"
+            android:paddingBottom="@dimen/card_padding"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:id="@+id/schoolName"/>
+    </androidx.cardview.widget.CardView>
+</layout>
