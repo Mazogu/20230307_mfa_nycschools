@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.a20230307_mfa_nycschools.R;
+import com.example.a20230307_mfa_nycschools.model.NYCSchool;
 import com.example.a20230307_mfa_nycschools.viewmodel.NYCViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -23,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class NYCSchoolListFragment extends Fragment {
 
     private NYCViewModel viewModel;
+    private NYCSchoolCallback callback;
 
     public NYCSchoolListFragment() {
         // Required empty public constructor
@@ -32,6 +36,7 @@ public class NYCSchoolListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(NYCViewModel.class);
+        callback = this::navigateToSATPage;
     }
 
     @Override
@@ -48,7 +53,7 @@ public class NYCSchoolListFragment extends Fragment {
         viewModel.getSchoolList().observe(getViewLifecycleOwner(), nycSchools -> {
             if(!nycSchools.isEmpty()){
                 recyclerView.setVisibility(View.VISIBLE);
-                NYCSchoolAdapter adapter = new NYCSchoolAdapter(nycSchools);
+                NYCSchoolAdapter adapter = new NYCSchoolAdapter(nycSchools, callback);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
             }
@@ -61,9 +66,20 @@ public class NYCSchoolListFragment extends Fragment {
         });
     }
 
+    private void navigateToSATPage(NYCSchool school){
+        NavController controller = Navigation.findNavController(requireActivity(), R.id.fragment_container);
+        Bundle bundle = new Bundle();
+        bundle.putString("schoolId", school.getId());
+        controller.navigate(R.id.action_NYCSchoolListFragment_to_NYCSATFragment, bundle);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         viewModel.getNYCSchools();
+    }
+
+    public interface NYCSchoolCallback{
+        void navigate(NYCSchool school);
     }
 }

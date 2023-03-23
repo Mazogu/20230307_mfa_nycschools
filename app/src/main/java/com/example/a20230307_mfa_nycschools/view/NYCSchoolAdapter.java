@@ -1,15 +1,10 @@
 package com.example.a20230307_mfa_nycschools.view;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a20230307_mfa_nycschools.R;
@@ -21,10 +16,13 @@ import java.util.List;
 public class NYCSchoolAdapter extends RecyclerView.Adapter<NYCSchoolAdapter.NYCSchoolHolder> {
 
     private final List<NYCSchool> schoolList;
+    private final NYCSchoolListFragment.NYCSchoolCallback callback;
 
-    public NYCSchoolAdapter(List<NYCSchool> list){
+    public NYCSchoolAdapter(List<NYCSchool> list, NYCSchoolListFragment.NYCSchoolCallback callback){
         this.schoolList = list;
+        this.callback = callback;
     }
+
 
     @NonNull
     @Override
@@ -37,12 +35,7 @@ public class NYCSchoolAdapter extends RecyclerView.Adapter<NYCSchoolAdapter.NYCS
     public void onBindViewHolder(@NonNull NYCSchoolHolder holder, int position) {
         NYCSchool school = schoolList.get(position);
         holder.bind(school);
-        holder.itemView.setOnClickListener(view -> {
-            NavController controller = Navigation.findNavController(holder.itemView);
-            Bundle bundle = new Bundle();
-            bundle.putString("schoolId", school.getId());
-            controller.navigate(R.id.action_NYCSchoolListFragment_to_NYCSATFragment, bundle);
-        });
+        holder.itemView.setOnClickListener(view -> callback.navigate(school));
     }
 
     @Override
