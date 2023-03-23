@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +16,10 @@ import android.view.ViewGroup;
 import com.example.a20230307_mfa_nycschools.R;
 import com.example.a20230307_mfa_nycschools.viewmodel.NYCViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+
+@AndroidEntryPoint
 public class NYCSchoolListFragment extends Fragment {
 
     private NYCViewModel viewModel;
@@ -27,7 +31,7 @@ public class NYCSchoolListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = NYCViewModel.Companion.getFactory().create(NYCViewModel.class);
+        viewModel = new ViewModelProvider(this).get(NYCViewModel.class);
     }
 
     @Override

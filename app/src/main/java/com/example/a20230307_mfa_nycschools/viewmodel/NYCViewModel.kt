@@ -4,9 +4,11 @@ import androidx.lifecycle.*
 import com.example.a20230307_mfa_nycschools.model.NYCSATScores
 import com.example.a20230307_mfa_nycschools.model.NYCSchool
 import com.example.a20230307_mfa_nycschools.retrofit.NYCSchoolRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * View model for handling NYC school requests.
@@ -17,8 +19,8 @@ import timber.log.Timber
  * @property _currentSchool [MutableLiveData] Representing the selected school from the list.
  * @property currentSchool [LiveData] representation for [_currentSchool].
  */
-@Suppress("UNCHECKED_CAST")
-class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
+@HiltViewModel
+class NYCViewModel @Inject constructor(private val repo:NYCSchoolRepo):ViewModel() {
     private val _schoolList = MutableLiveData<List<NYCSchool>>()
     val schoolList get() = _schoolList as LiveData<List<NYCSchool>>
     private val _currentSchool = MutableLiveData<NYCSATScores>()
@@ -83,15 +85,12 @@ class NYCViewModel(private val repo:NYCSchoolRepo):ViewModel() {
         }
     }
 
-    companion object{
-        /**
-         * Custom [NYCViewModel] provider.
-         */
+   /* companion object{
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory{
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return NYCViewModel(NYCSchoolRepo()) as T
             }
         }
-    }
+    }*/
 
 }
